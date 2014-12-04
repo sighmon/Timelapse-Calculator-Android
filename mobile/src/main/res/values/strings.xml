@@ -12,6 +12,8 @@
     <string name="cancel">Cancel</string>
     <string name="dialog_message">Oh hi there. You tapped search.</string>
     <string name="dialog_title">Search</string>
+    <string name="shooting_picker">Shooting</string>
+    <string name="playback_picker">Playback</string>
 
 
 </resources>

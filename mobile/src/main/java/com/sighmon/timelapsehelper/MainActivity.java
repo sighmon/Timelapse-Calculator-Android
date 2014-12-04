@@ -15,10 +15,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
 import android.widget.EditText;
+import android.widget.NumberPicker;
 
 public class MainActivity extends Activity {
 
     public final static String EXTRA_MESSAGE = "com.sighmon.timelapsehelper.MESSAGE";
+    public final static Integer PLAYBACK_FPS = 30;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +95,26 @@ public class MainActivity extends Activity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+
+            // Set the min/max for the pickers.
+            NumberPicker shootingDays = (NumberPicker) rootView.findViewById(R.id.shooting_days);
+            shootingDays.setMaxValue(99);
+            NumberPicker shootingHours = (NumberPicker) rootView.findViewById(R.id.shooting_hours);
+            shootingHours.setMaxValue(23);
+            NumberPicker shootingMinutes = (NumberPicker) rootView.findViewById(R.id.shooting_minutes);
+            shootingMinutes.setMaxValue(59);
+            NumberPicker shootingSeconds = (NumberPicker) rootView.findViewById(R.id.shooting_seconds);
+            shootingSeconds.setMaxValue(59);
+
+            NumberPicker playbackHours = (NumberPicker) rootView.findViewById(R.id.playback_hours);
+            playbackHours.setMaxValue(23);
+            NumberPicker playbackMinutes = (NumberPicker) rootView.findViewById(R.id.playback_minutes);
+            playbackMinutes.setMaxValue(60);
+            NumberPicker playbackSeconds = (NumberPicker) rootView.findViewById(R.id.playback_seconds);
+            playbackSeconds.setMaxValue(60);
+            NumberPicker playbackFrames = (NumberPicker) rootView.findViewById(R.id.playback_frames);
+            playbackFrames.setMaxValue(PLAYBACK_FPS);
+
             return rootView;
         }
     }

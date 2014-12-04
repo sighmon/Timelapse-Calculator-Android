@@ -2,15 +2,97 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal">
-    <EditText android:id="@+id/edit_message"
-        android:layout_weight="1"
-        android:layout_width="0dp"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/edit_message" />
-    <Button
-        android:layout_width="wrap_content"
+        android:orientation="horizontal">
+        <EditText android:id="@+id/edit_message"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/edit_message" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/press_me"
+            android:onClick="sendMessage" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/press_me"
-        android:onClick="sendMessage" />
+        android:orientation="horizontal"
+        android:paddingBottom="10dp">
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/shooting_picker"
+            android:textSize="30dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <NumberPicker
+            android:id="@+id/shooting_days"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"></NumberPicker>
+        <NumberPicker
+            android:id="@+id/shooting_hours"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"></NumberPicker>
+        <NumberPicker
+            android:id="@+id/shooting_minutes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"></NumberPicker>
+        <NumberPicker
+            android:id="@+id/shooting_seconds"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"></NumberPicker>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="20dp"
+        android:paddingBottom="10dp">
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/playback_picker"
+            android:textSize="30dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <NumberPicker
+            android:id="@+id/playback_hours"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"></NumberPicker>
+        <NumberPicker
+            android:id="@+id/playback_minutes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"></NumberPicker>
+        <NumberPicker
+            android:id="@+id/playback_seconds"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"></NumberPicker>
+        <NumberPicker
+            android:id="@+id/playback_frames"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"></NumberPicker>
+    </LinearLayout>
+
 </LinearLayout>
