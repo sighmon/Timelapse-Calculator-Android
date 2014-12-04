@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Timelapse Helper</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="press_me">Press me!</string>
+    <string name="edit_message">Edit me</string>
+    <string name="title_activity_display_message">DisplayMessageActivity</string>
+    <string name="menu_search">Search</string>
+    <string name="ok">Ok</string>
+    <string name="cancel">Cancel</string>
+    <string name="dialog_message">Oh hi there. You tapped search.</string>
+    <string name="dialog_title">Search</string>
+
+
+</resources>
