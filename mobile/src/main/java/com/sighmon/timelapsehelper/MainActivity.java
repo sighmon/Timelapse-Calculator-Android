@@ -16,11 +16,14 @@ import android.view.ViewGroup;
 import android.os.Build;
 import android.widget.EditText;
 import android.widget.NumberPicker;
+import android.widget.TextView;
 
 public class MainActivity extends Activity {
 
     public final static String EXTRA_MESSAGE = "com.sighmon.timelapsehelper.MESSAGE";
-    public final static Integer PLAYBACK_FPS = 30;
+    public final static String INTERVAL_FIELD = "8";
+    public final static String SHOTS_FIELD = "3600";
+    public final static String FPS_FIELD = "30";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,7 +116,16 @@ public class MainActivity extends Activity {
             NumberPicker playbackSeconds = (NumberPicker) rootView.findViewById(R.id.playback_seconds);
             playbackSeconds.setMaxValue(60);
             NumberPicker playbackFrames = (NumberPicker) rootView.findViewById(R.id.playback_frames);
-            playbackFrames.setMaxValue(PLAYBACK_FPS);
+            playbackFrames.setMaxValue(Integer.parseInt(FPS_FIELD));
+
+            // Set the Interval, Shots & FPS fields to defaults
+            // TODO: Work out how to set app defaults in Android
+            EditText intervalField = (EditText) rootView.findViewById(R.id.interval);
+            intervalField.setText(INTERVAL_FIELD, TextView.BufferType.EDITABLE);
+            EditText shotsField = (EditText) rootView.findViewById(R.id.shots);
+            shotsField.setText(SHOTS_FIELD, TextView.BufferType.EDITABLE);
+            EditText fpsField = (EditText) rootView.findViewById(R.id.fps);
+            fpsField.setText(FPS_FIELD, TextView.BufferType.EDITABLE);
 
             return rootView;
         }
