@@ -21,9 +21,9 @@ import android.widget.TextView;
 public class MainActivity extends Activity {
 
     public final static String EXTRA_MESSAGE = "com.sighmon.timelapsehelper.MESSAGE";
-    public final static String INTERVAL_FIELD = "8";
-    public final static String SHOTS_FIELD = "3600";
-    public final static String FPS_FIELD = "30";
+    public final static Integer INTERVAL_FIELD = 8;
+    public final static Integer SHOTS_FIELD = 3600;
+    public final static Integer FPS_FIELD = 30;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +34,9 @@ public class MainActivity extends Activity {
                     .add(R.id.container, new PlaceholderFragment())
                     .commit();
         }
+
+        // Calculate the shooting time
+        calculateShootingTime(SHOTS_FIELD, INTERVAL_FIELD);
     }
 
 
@@ -116,16 +119,16 @@ public class MainActivity extends Activity {
             NumberPicker playbackSeconds = (NumberPicker) rootView.findViewById(R.id.playback_seconds);
             playbackSeconds.setMaxValue(60);
             NumberPicker playbackFrames = (NumberPicker) rootView.findViewById(R.id.playback_frames);
-            playbackFrames.setMaxValue(Integer.parseInt(FPS_FIELD));
+            playbackFrames.setMaxValue(FPS_FIELD);
 
             // Set the Interval, Shots & FPS fields to defaults
             // TODO: Work out how to set app defaults in Android
             EditText intervalField = (EditText) rootView.findViewById(R.id.interval);
-            intervalField.setText(INTERVAL_FIELD, TextView.BufferType.EDITABLE);
+            intervalField.setText(INTERVAL_FIELD.toString(), TextView.BufferType.EDITABLE);
             EditText shotsField = (EditText) rootView.findViewById(R.id.shots);
-            shotsField.setText(SHOTS_FIELD, TextView.BufferType.EDITABLE);
+            shotsField.setText(SHOTS_FIELD.toString(), TextView.BufferType.EDITABLE);
             EditText fpsField = (EditText) rootView.findViewById(R.id.fps);
-            fpsField.setText(FPS_FIELD, TextView.BufferType.EDITABLE);
+            fpsField.setText(FPS_FIELD.toString(), TextView.BufferType.EDITABLE);
 
             return rootView;
         }
@@ -139,6 +142,31 @@ public class MainActivity extends Activity {
         String message = editText.getText().toString();
         intent.putExtra(EXTRA_MESSAGE, message);
         startActivity(intent);
+    }
+
+    /*** TIME CALCULATION MATH ***/
+
+    public void calculateShootingTime(int shots, int interval) {
+        // Calculate the shooting time
+        if (interval > 0) {
+            int totalRealSeconds = shots * interval;
+            int totalRealMinutes = totalRealSeconds / 60;
+            int totalRealHours = totalRealMinutes / 60;
+            int totalRealDays = totalRealHours / 24;
+            int totalRealHoursRemainder = totalRealHours % 24;
+            int totalRealMinutesRemainder = totalRealMinutes % 60;
+            int totalRealSecondsRemainder = totalRealSeconds % 60;
+
+            // Update the shooting picker
+            NumberPicker shootingDays = (NumberPicker) findViewById(R.id.shooting_days);
+            shootingDays.setValue(totalRealDays);
+            NumberPicker shootingHours = (NumberPicker) findViewById(R.id.shooting_hours);
+            shootingHours.setValue(totalRealHoursRemainder);
+            NumberPicker shootingMinutes = (NumberPicker) findViewById(R.id.shooting_minutes);
+            shootingMinutes.setValue(totalRealMinutesRemainder);
+            NumberPicker shootingSeconds = (NumberPicker) findViewById(R.id.shooting_seconds);
+            shootingSeconds.setValue(totalRealSecondsRemainder);
+        }
     }
 }
 

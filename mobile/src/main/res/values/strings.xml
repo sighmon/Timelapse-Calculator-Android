@@ -8,7 +8,7 @@
     <string name="edit_message">Edit me</string>
     <string name="title_activity_display_message">DisplayMessageActivity</string>
     <string name="menu_search">Search</string>
-    <string name="ok">Ok</string>
+    <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="dialog_message">Oh hi there. You tapped search.</string>
     <string name="dialog_title">Search</string>
