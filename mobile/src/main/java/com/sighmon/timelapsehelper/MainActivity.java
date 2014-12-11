@@ -140,6 +140,7 @@ public class MainActivity extends Activity {
                     @Override
                     public void onTextChanged(CharSequence s, int start, int before, int count) {
                         calculateShootingTime(rootView);
+                        calculatePlaybackTime(rootView);
                     }
 
                     @Override
@@ -151,6 +152,7 @@ public class MainActivity extends Activity {
 
             // Calculate the shooting time
             calculateShootingTime(rootView);
+            calculatePlaybackTime(rootView);
 
             return rootView;
         }
@@ -206,6 +208,46 @@ public class MainActivity extends Activity {
             shootingMinutes.setValue(totalRealMinutesRemainder);
             NumberPicker shootingSeconds = (NumberPicker) view.findViewById(R.id.shooting_seconds);
             shootingSeconds.setValue(totalRealSecondsRemainder);
+        }
+    }
+
+    public static void calculatePlaybackTime(View view) {
+
+        EditText fpsEditText = (EditText) view.findViewById(R.id.fps);
+        EditText shotsEditText = (EditText) view.findViewById(R.id.shots);
+
+        String fpsString = fpsEditText.getText().toString();
+        int playbackFPS = 0;
+        try {
+            playbackFPS = Integer.parseInt(fpsString);
+        }
+        catch (NumberFormatException e){/* Ignore the exception */}
+
+        String shotsString = shotsEditText.getText().toString();
+        int shots = 0;
+        try {
+            shots = Integer.parseInt(shotsString);
+        }
+        catch (NumberFormatException e){/* Ignore the exception */}
+
+        // Calculate the playback time
+        if (playbackFPS > 0) {
+            int totalPlaybackSeconds = shots / playbackFPS;
+            int totalPlaybackMinutes = totalPlaybackSeconds / 60;
+            int totalPlaybackHours = totalPlaybackMinutes / 60;
+            int totalPlaybackMinutesRemainder = totalPlaybackMinutes % 60;
+            int totalPlaybackSecondsRemainder = totalPlaybackSeconds % 60;
+            int totalPlaybackFrames = shots % playbackFPS;
+
+            // Update the playback picker
+            NumberPicker playbackHours = (NumberPicker) view.findViewById(R.id.playback_hours);
+            playbackHours.setValue(totalPlaybackHours);
+            NumberPicker playbackMinutes = (NumberPicker) view.findViewById(R.id.playback_minutes);
+            playbackMinutes.setValue(totalPlaybackMinutesRemainder);
+            NumberPicker playbackSeconds = (NumberPicker) view.findViewById(R.id.playback_seconds);
+            playbackSeconds.setValue(totalPlaybackSecondsRemainder);
+            NumberPicker playbackFrames = (NumberPicker) view.findViewById(R.id.playback_frames);
+            playbackFrames.setValue(totalPlaybackFrames);
         }
     }
 }
