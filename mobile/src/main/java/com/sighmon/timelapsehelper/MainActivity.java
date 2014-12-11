@@ -175,32 +175,6 @@ public class MainActivity extends Activity {
                 });
             }
 
-            for (NumberPicker picker : new NumberPicker[]{playbackHours, playbackMinutes, playbackSeconds, playbackFrames}) {
-                // When the user moves the PlaybackPicker
-                picker.setOnScrollListener(new NumberPicker.OnScrollListener() {
-                    @Override
-                    public void onScrollStateChange(NumberPicker view, int scrollState) {
-                        if (scrollState == SCROLL_STATE_IDLE) {
-                            // Perform the calculations
-                            playbackCentric(rootView);
-                        }
-                    }
-                });
-            }
-
-            for (NumberPicker picker : new NumberPicker[]{shootingDays, shootingHours, shootingMinutes, shootingSeconds}) {
-                // When the user moves the ShootingPicker
-                picker.setOnScrollListener(new NumberPicker.OnScrollListener() {
-                    @Override
-                    public void onScrollStateChange(NumberPicker view, int scrollState) {
-                        if (scrollState == SCROLL_STATE_IDLE) {
-                            // Perform the calculations
-                            shootingCentric(rootView);
-                        }
-                    }
-                });
-            }
-
             // Calculate the shooting time
             calculateShootingTime(rootView);
             calculatePlaybackTime(rootView);
@@ -212,6 +186,13 @@ public class MainActivity extends Activity {
                     picker.setOnScrollListener(new NumberPicker.OnScrollListener() {
                         @Override
                         public void onScrollStateChange(NumberPicker v, int scrollState) {
+                            if (scrollState == SCROLL_STATE_IDLE) {
+                                if (group == shootingGroup) {
+                                    shootingCentric(rootView);
+                                } else if (group == playbackGroup) {
+                                    playbackCentric(rootView);
+                                }
+                            }
                             scrollStates.put(v, scrollState);
                             //Log.i("picker", "scroll state: " + scrollState);
                         }
