@@ -19,7 +19,11 @@ import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.EventListener;
+import java.util.HashMap;
+import java.util.List;
 
 public class MainActivity extends Activity {
 
@@ -97,7 +101,10 @@ public class MainActivity extends Activity {
         public PlaceholderFragment() {
         }
 
-        int storedScrollState;
+        HashMap<NumberPicker,Integer> scrollStates = new HashMap<NumberPicker,Integer>();
+
+        List shootingGroup;
+        List playbackGroup;
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -111,8 +118,14 @@ public class MainActivity extends Activity {
             shootingHours.setMaxValue(23);
             final NumberPicker shootingMinutes = (NumberPicker) rootView.findViewById(R.id.shooting_minutes);
             shootingMinutes.setMaxValue(59);
-            NumberPicker shootingSeconds = (NumberPicker) rootView.findViewById(R.id.shooting_seconds);
+            final NumberPicker shootingSeconds = (NumberPicker) rootView.findViewById(R.id.shooting_seconds);
             shootingSeconds.setMaxValue(59);
+
+            shootingGroup = Arrays.asList(
+                    shootingDays,
+                    shootingHours,
+                    shootingMinutes,
+                    shootingSeconds);
 
             NumberPicker playbackHours = (NumberPicker) rootView.findViewById(R.id.playback_hours);
             playbackHours.setMaxValue(23);
@@ -122,6 +135,13 @@ public class MainActivity extends Activity {
             playbackSeconds.setMaxValue(60);
             NumberPicker playbackFrames = (NumberPicker) rootView.findViewById(R.id.playback_frames);
             playbackFrames.setMaxValue(FPS_FIELD);
+
+            playbackGroup = Arrays.asList(
+                    playbackHours,
+                    playbackMinutes,
+                    playbackSeconds,
+                    playbackFrames);
+
 
             // Set the Interval, Shots & FPS fields to defaults
             // TODO: Work out how to set app defaults in Android
@@ -135,27 +155,40 @@ public class MainActivity extends Activity {
             // Calculate the shooting time
             calculateShootingTime(rootView);
 
-            shootingSeconds.setOnScrollListener(new NumberPicker.OnScrollListener() {
-                @Override
-                public void onScrollStateChange(NumberPicker v, int scrollState) {
-                    storedScrollState = scrollState;
-                    Log.i("picker","scroll state: "+scrollState);
-                }
-            });
+            for (final List group : new List[]{shootingGroup,playbackGroup}) {
 
-            shootingSeconds.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
-                @Override
-                public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                    int delta = newVal - oldVal;
-                    Log.i("picker", "valuechanged from " + oldVal + " to " + newVal + " (delta " + delta + ")");
-                    int maxDelta = picker.getMaxValue() - picker.getMinValue();
-                    if (storedScrollState!=NumberPicker.OnScrollListener.SCROLL_STATE_IDLE && Math.abs(delta) > (maxDelta / 2)) {
-                        shootingMinutes.setValue(shootingMinutes.getValue()-Integer.signum(delta));
-                        Log.i("picker", "rollover detected");
-                    }
-
+                for (Object po : group) {
+                    NumberPicker picker = (NumberPicker) po;
+                    picker.setOnScrollListener(new NumberPicker.OnScrollListener() {
+                        @Override
+                        public void onScrollStateChange(NumberPicker v, int scrollState) {
+                            scrollStates.put(v, scrollState);
+                            //Log.i("picker", "scroll state: " + scrollState);
+                        }
+                    });
                 }
-            });
+
+                for (final Object po : group) {
+                    NumberPicker picker = (NumberPicker) po;
+                    picker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+                        @Override
+                        public void onValueChange(NumberPicker thisPicker, int oldVal, int newVal) {
+                            int delta = newVal - oldVal;
+                            //Log.i("picker", "valuechanged from " + oldVal + " to " + newVal + " (delta " + delta + ")");
+                            int maxDelta = thisPicker.getMaxValue() - thisPicker.getMinValue();
+                            // if this picker is scrolling and the value has jumped, we have probably rolled over
+                            if (scrollStates.get(thisPicker).intValue() != NumberPicker.OnScrollListener.SCROLL_STATE_IDLE && Math.abs(delta) > (maxDelta / 2)) {
+                                int thisIndex = group.indexOf(thisPicker);
+                                if (thisIndex>0) {
+                                    NumberPicker nextMostSignificantPicker = (NumberPicker) group.get(thisIndex - 1);
+                                    nextMostSignificantPicker.setValue(nextMostSignificantPicker.getValue() - Integer.signum(delta));
+                                    //Log.i("picker", "rollover detected");
+                                }
+                            }
+                        }
+                    });
+                }
+            }
 
             return rootView;
         }
