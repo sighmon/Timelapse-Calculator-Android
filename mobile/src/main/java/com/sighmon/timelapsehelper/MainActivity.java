@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,6 +18,8 @@ import android.os.Build;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.TextView;
+
+import java.util.EventListener;
 
 public class MainActivity extends Activity {
 
@@ -94,6 +97,8 @@ public class MainActivity extends Activity {
         public PlaceholderFragment() {
         }
 
+        int storedScrollState;
+
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
@@ -104,7 +109,7 @@ public class MainActivity extends Activity {
             shootingDays.setMaxValue(99);
             NumberPicker shootingHours = (NumberPicker) rootView.findViewById(R.id.shooting_hours);
             shootingHours.setMaxValue(23);
-            NumberPicker shootingMinutes = (NumberPicker) rootView.findViewById(R.id.shooting_minutes);
+            final NumberPicker shootingMinutes = (NumberPicker) rootView.findViewById(R.id.shooting_minutes);
             shootingMinutes.setMaxValue(59);
             NumberPicker shootingSeconds = (NumberPicker) rootView.findViewById(R.id.shooting_seconds);
             shootingSeconds.setMaxValue(59);
@@ -129,6 +134,28 @@ public class MainActivity extends Activity {
 
             // Calculate the shooting time
             calculateShootingTime(rootView);
+
+            shootingSeconds.setOnScrollListener(new NumberPicker.OnScrollListener() {
+                @Override
+                public void onScrollStateChange(NumberPicker v, int scrollState) {
+                    storedScrollState = scrollState;
+                    Log.i("picker","scroll state: "+scrollState);
+                }
+            });
+
+            shootingSeconds.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+                @Override
+                public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                    int delta = newVal - oldVal;
+                    Log.i("picker", "valuechanged from " + oldVal + " to " + newVal + " (delta " + delta + ")");
+                    int maxDelta = picker.getMaxValue() - picker.getMinValue();
+                    if (storedScrollState!=NumberPicker.OnScrollListener.SCROLL_STATE_IDLE && Math.abs(delta) > (maxDelta / 2)) {
+                        shootingMinutes.setValue(shootingMinutes.getValue()-Integer.signum(delta));
+                        Log.i("picker", "rollover detected");
+                    }
+
+                }
+            });
 
             return rootView;
         }
