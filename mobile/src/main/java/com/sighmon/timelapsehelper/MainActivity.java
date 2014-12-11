@@ -34,9 +34,6 @@ public class MainActivity extends Activity {
                     .add(R.id.container, new PlaceholderFragment())
                     .commit();
         }
-
-        // Calculate the shooting time
-        calculateShootingTime(SHOTS_FIELD, INTERVAL_FIELD);
     }
 
 
@@ -130,6 +127,9 @@ public class MainActivity extends Activity {
             EditText fpsField = (EditText) rootView.findViewById(R.id.fps);
             fpsField.setText(FPS_FIELD.toString(), TextView.BufferType.EDITABLE);
 
+            // Calculate the shooting time
+            calculateShootingTime(rootView);
+
             return rootView;
         }
     }
@@ -146,7 +146,16 @@ public class MainActivity extends Activity {
 
     /*** TIME CALCULATION MATH ***/
 
-    public void calculateShootingTime(int shots, int interval) {
+    public static void calculateShootingTime(View view) {
+
+        EditText intervalEditText = (EditText) view.findViewById(R.id.interval);
+        EditText shotsEditText = (EditText) view.findViewById(R.id.shots);
+
+        String intervalString = intervalEditText.getText().toString();
+        int interval = Integer.parseInt(intervalString);
+        String shotsString = shotsEditText.getText().toString();
+        int shots = Integer.parseInt(shotsString);
+
         // Calculate the shooting time
         if (interval > 0) {
             int totalRealSeconds = shots * interval;
@@ -158,13 +167,13 @@ public class MainActivity extends Activity {
             int totalRealSecondsRemainder = totalRealSeconds % 60;
 
             // Update the shooting picker
-            NumberPicker shootingDays = (NumberPicker) findViewById(R.id.shooting_days);
+            NumberPicker shootingDays = (NumberPicker) view.findViewById(R.id.shooting_days);
             shootingDays.setValue(totalRealDays);
-            NumberPicker shootingHours = (NumberPicker) findViewById(R.id.shooting_hours);
+            NumberPicker shootingHours = (NumberPicker) view.findViewById(R.id.shooting_hours);
             shootingHours.setValue(totalRealHoursRemainder);
-            NumberPicker shootingMinutes = (NumberPicker) findViewById(R.id.shooting_minutes);
+            NumberPicker shootingMinutes = (NumberPicker) view.findViewById(R.id.shooting_minutes);
             shootingMinutes.setValue(totalRealMinutesRemainder);
-            NumberPicker shootingSeconds = (NumberPicker) findViewById(R.id.shooting_seconds);
+            NumberPicker shootingSeconds = (NumberPicker) view.findViewById(R.id.shooting_seconds);
             shootingSeconds.setValue(totalRealSecondsRemainder);
         }
     }
