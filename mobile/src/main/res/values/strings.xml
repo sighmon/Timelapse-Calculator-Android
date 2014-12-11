@@ -25,6 +25,7 @@
     <string name="playbackMinutes">Mins</string>
     <string name="playbackSeconds">Secs</string>
     <string name="playbackFrames">Frms</string>
+    <string name="menu_share">Share</string>
 
 
 </resources>

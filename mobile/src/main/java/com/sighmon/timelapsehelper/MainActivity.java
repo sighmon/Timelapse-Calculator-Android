@@ -59,9 +59,10 @@ public class MainActivity extends Activity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
-            case R.id.menu_search:
-                Log.i("Search", "Search pressed.");
-                openSearch();
+            case R.id.menu_share:
+                Log.i("Share", "Share pressed.");
+
+                openShare();
                 return true;
             case R.id.action_settings:
 //                openSettings();
@@ -69,6 +70,28 @@ public class MainActivity extends Activity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    public void openShare() {
+
+        View view = getWindow().getDecorView();
+
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/html");
+        //intent.putExtra(Intent.EXTRA_EMAIL, "emailaddress@emailaddress.com");
+        intent.putExtra(Intent.EXTRA_SUBJECT, "Timelapse calculations");
+        intent.putExtra(Intent.EXTRA_TEXT, String.format("Shooting duration of %1$d shots at an interval of %2$d seconds will be %3$s. \n\nPlayback duration of %4$d shots at %5$d frames per second will be %6$s.",
+                getIntegerFromEditText(view,R.id.shots),
+                getIntegerFromEditText(view,R.id.interval),
+                "ages",
+                getIntegerFromEditText(view,R.id.shots),
+                getIntegerFromEditText(view,R.id.fps),
+                "very long"));
+
+
+
+        startActivity(Intent.createChooser(intent, "Send Email"));
+
     }
 
     public void openSearch() {
