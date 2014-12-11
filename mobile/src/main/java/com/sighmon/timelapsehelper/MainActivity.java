@@ -119,9 +119,9 @@ public class MainActivity extends Activity {
             shootingDays.setWrapSelectorWheel(false);
             NumberPicker shootingHours = (NumberPicker) rootView.findViewById(R.id.shooting_hours);
             shootingHours.setMaxValue(23);
-            final NumberPicker shootingMinutes = (NumberPicker) rootView.findViewById(R.id.shooting_minutes);
+            NumberPicker shootingMinutes = (NumberPicker) rootView.findViewById(R.id.shooting_minutes);
             shootingMinutes.setMaxValue(59);
-            final NumberPicker shootingSeconds = (NumberPicker) rootView.findViewById(R.id.shooting_seconds);
+            NumberPicker shootingSeconds = (NumberPicker) rootView.findViewById(R.id.shooting_seconds);
             shootingSeconds.setMaxValue(59);
 
             shootingGroup = Arrays.asList(
