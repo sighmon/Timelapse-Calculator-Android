@@ -7,6 +7,8 @@ import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -97,7 +99,7 @@ public class MainActivity extends Activity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+            final View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
             // Set the min/max for the pickers.
             NumberPicker shootingDays = (NumberPicker) rootView.findViewById(R.id.shooting_days);
@@ -127,6 +129,26 @@ public class MainActivity extends Activity {
             EditText fpsField = (EditText) rootView.findViewById(R.id.fps);
             fpsField.setText(FPS_FIELD.toString(), TextView.BufferType.EDITABLE);
 
+            for (EditText field : new EditText[]{intervalField, shotsField, fpsField}) {
+                // If the user changes a field...
+                field.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        calculateShootingTime(rootView);
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+
+                    }
+                });
+            }
+
             // Calculate the shooting time
             calculateShootingTime(rootView);
 
@@ -152,9 +174,18 @@ public class MainActivity extends Activity {
         EditText shotsEditText = (EditText) view.findViewById(R.id.shots);
 
         String intervalString = intervalEditText.getText().toString();
-        int interval = Integer.parseInt(intervalString);
+        int interval = 0;
+        try {
+            interval = Integer.parseInt(intervalString);
+        }
+        catch (NumberFormatException e){/* Ignore the exception */}
+
         String shotsString = shotsEditText.getText().toString();
-        int shots = Integer.parseInt(shotsString);
+        int shots = 0;
+        try {
+            shots = Integer.parseInt(shotsString);
+        }
+        catch (NumberFormatException e){/* Ignore the exception */}
 
         // Calculate the shooting time
         if (interval > 0) {
