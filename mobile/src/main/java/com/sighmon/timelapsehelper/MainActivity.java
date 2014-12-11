@@ -114,9 +114,9 @@ public class MainActivity extends Activity {
             NumberPicker playbackHours = (NumberPicker) rootView.findViewById(R.id.playback_hours);
             playbackHours.setMaxValue(23);
             NumberPicker playbackMinutes = (NumberPicker) rootView.findViewById(R.id.playback_minutes);
-            playbackMinutes.setMaxValue(60);
+            playbackMinutes.setMaxValue(59);
             NumberPicker playbackSeconds = (NumberPicker) rootView.findViewById(R.id.playback_seconds);
-            playbackSeconds.setMaxValue(60);
+            playbackSeconds.setMaxValue(59);
             NumberPicker playbackFrames = (NumberPicker) rootView.findViewById(R.id.playback_frames);
             playbackFrames.setMaxValue(FPS_FIELD);
 
@@ -130,7 +130,7 @@ public class MainActivity extends Activity {
             fpsField.setText(FPS_FIELD.toString(), TextView.BufferType.EDITABLE);
 
             for (EditText field : new EditText[]{intervalField, shotsField, fpsField}) {
-                // If the user changes a field...
+                // When the user changes a field...
                 field.addTextChangedListener(new TextWatcher() {
                     @Override
                     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -146,6 +146,32 @@ public class MainActivity extends Activity {
                     @Override
                     public void afterTextChanged(Editable s) {
 
+                    }
+                });
+            }
+
+            for (NumberPicker picker : new NumberPicker[]{playbackHours, playbackMinutes, playbackSeconds, playbackFrames}) {
+                // When the user moves the PlaybackPicker
+                picker.setOnScrollListener(new NumberPicker.OnScrollListener() {
+                    @Override
+                    public void onScrollStateChange(NumberPicker view, int scrollState) {
+                        if (scrollState == SCROLL_STATE_IDLE) {
+                            // Perform the calculations
+                            playbackCentric(rootView);
+                        }
+                    }
+                });
+            }
+
+            for (NumberPicker picker : new NumberPicker[]{shootingDays, shootingHours, shootingMinutes, shootingSeconds}) {
+                // When the user moves the ShootingPicker
+                picker.setOnScrollListener(new NumberPicker.OnScrollListener() {
+                    @Override
+                    public void onScrollStateChange(NumberPicker view, int scrollState) {
+                        if (scrollState == SCROLL_STATE_IDLE) {
+                            // Perform the calculations
+                            shootingCentric(rootView);
+                        }
                     }
                 });
             }
@@ -172,22 +198,8 @@ public class MainActivity extends Activity {
 
     public static void calculateShootingTime(View view) {
 
-        EditText intervalEditText = (EditText) view.findViewById(R.id.interval);
-        EditText shotsEditText = (EditText) view.findViewById(R.id.shots);
-
-        String intervalString = intervalEditText.getText().toString();
-        int interval = 0;
-        try {
-            interval = Integer.parseInt(intervalString);
-        }
-        catch (NumberFormatException e){/* Ignore the exception */}
-
-        String shotsString = shotsEditText.getText().toString();
-        int shots = 0;
-        try {
-            shots = Integer.parseInt(shotsString);
-        }
-        catch (NumberFormatException e){/* Ignore the exception */}
+        int interval = getIntegerFromEditText(view, R.id.interval);
+        int shots = getIntegerFromEditText(view, R.id.shots);
 
         // Calculate the shooting time
         if (interval > 0) {
@@ -213,22 +225,8 @@ public class MainActivity extends Activity {
 
     public static void calculatePlaybackTime(View view) {
 
-        EditText fpsEditText = (EditText) view.findViewById(R.id.fps);
-        EditText shotsEditText = (EditText) view.findViewById(R.id.shots);
-
-        String fpsString = fpsEditText.getText().toString();
-        int playbackFPS = 0;
-        try {
-            playbackFPS = Integer.parseInt(fpsString);
-        }
-        catch (NumberFormatException e){/* Ignore the exception */}
-
-        String shotsString = shotsEditText.getText().toString();
-        int shots = 0;
-        try {
-            shots = Integer.parseInt(shotsString);
-        }
-        catch (NumberFormatException e){/* Ignore the exception */}
+        int playbackFPS = getIntegerFromEditText(view, R.id.fps);
+        int shots = getIntegerFromEditText(view, R.id.shots);
 
         // Calculate the playback time
         if (playbackFPS > 0) {
@@ -249,6 +247,53 @@ public class MainActivity extends Activity {
             NumberPicker playbackFrames = (NumberPicker) view.findViewById(R.id.playback_frames);
             playbackFrames.setValue(totalPlaybackFrames);
         }
+    }
+
+    public static void playbackCentric(View view) {
+
+        int fps = getIntegerFromEditText(view, R.id.fps);
+        int hrs = ((NumberPicker) view.findViewById(R.id.playback_hours)).getValue();
+        int mins = ((NumberPicker) view.findViewById(R.id.playback_minutes)).getValue();
+        int secs = ((NumberPicker) view.findViewById(R.id.playback_seconds)).getValue();
+        int frames = ((NumberPicker) view.findViewById(R.id.playback_frames)).getValue();
+
+        int shots = (hrs * (60 * 60 * fps)) + (mins * (60*fps)) + (secs * fps) + frames;
+
+        EditText shotsField = (EditText) view.findViewById(R.id.shots);
+        shotsField.setText(Integer.toString(shots), TextView.BufferType.EDITABLE);
+
+        calculateShootingTime(view);
+    }
+
+    public static void shootingCentric(View view) {
+
+        int interval = getIntegerFromEditText(view, R.id.interval);
+        int days = ((NumberPicker) view.findViewById(R.id.shooting_days)).getValue();
+        int hrs = ((NumberPicker) view.findViewById(R.id.shooting_hours)).getValue();
+        int mins = ((NumberPicker) view.findViewById(R.id.shooting_minutes)).getValue();
+        int secs = ((NumberPicker) view.findViewById(R.id.shooting_seconds)).getValue();
+
+        int seconds = (days * 24 * 60 * 60) + (hrs * 60 * 60) + (mins * 60) + secs;
+        int shots = seconds / interval;
+
+        EditText shotsField = (EditText) view.findViewById(R.id.shots);
+        shotsField.setText(Integer.toString(shots), TextView.BufferType.EDITABLE);
+
+        calculatePlaybackTime(view);
+    }
+
+    public static int getIntegerFromEditText(View view, int objectId) {
+
+        EditText et = (EditText) view.findViewById(objectId);
+
+        String etString = et.getText().toString();
+        int etInteger = 0;
+        try {
+            etInteger = Integer.parseInt(etString);
+        }
+        catch (NumberFormatException e){/* Ignore the exception */}
+
+        return etInteger;
     }
 }
 
