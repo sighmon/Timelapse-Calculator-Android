@@ -2,25 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
-
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="20dp">
-
-        <EditText android:id="@+id/edit_message"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:hint="@string/edit_message" />
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/press_me"
-            android:onClick="sendMessage" />
-    </LinearLayout>
+    android:orientation="vertical"
+    android:gravity="center_vertical">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -74,7 +57,7 @@
             android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:text="@string/interval"
-            android:textSize="15dp"
+            android:textSize="@dimen/edit_text_description_text_size"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:gravity="center"/>
@@ -83,7 +66,7 @@
             android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:text="@string/shots"
-            android:textSize="15dp"
+            android:textSize="@dimen/edit_text_description_text_size"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:gravity="center"/>
@@ -92,7 +75,7 @@
             android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:text="@string/fps"
-            android:textSize="15dp"
+            android:textSize="@dimen/edit_text_description_text_size"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:gravity="center"/>
@@ -104,21 +87,21 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_gravity="center_horizontal"
-        android:paddingTop="20dp"
+        android:paddingTop="40dp"
         android:paddingBottom="5dp">
 
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/shooting_picker"
-            android:textSize="30dp"
+            android:textSize="@dimen/picker_title_text_size"
             android:layout_marginRight="60dp"/>
 
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/playback_picker"
-            android:textSize="30dp"/>
+            android:textSize="@dimen/picker_title_text_size"/>
 
     </LinearLayout>
 
@@ -161,6 +144,82 @@
             android:id="@+id/playback_frames"
             android:layout_width="40dp"
             android:layout_height="120dp"></NumberPicker>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="40dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/shootingDays"
+            android:textSize="@dimen/picker_description_text_size"
+            android:layout_marginLeft="@dimen/picker_description_margin"
+            android:layout_marginRight="@dimen/picker_description_margin"
+            android:gravity="center"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/shootingHours"
+            android:textSize="@dimen/picker_description_text_size"
+            android:layout_marginLeft="@dimen/picker_description_margin"
+            android:layout_marginRight="@dimen/picker_description_margin"
+            android:gravity="center"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/shootingMinutes"
+            android:textSize="@dimen/picker_description_text_size"
+            android:layout_marginLeft="@dimen/picker_description_margin"
+            android:layout_marginRight="@dimen/picker_description_margin"
+            android:gravity="center"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/shootingSeconds"
+            android:textSize="@dimen/picker_description_text_size"
+            android:layout_marginLeft="@dimen/picker_description_margin"
+            android:layout_marginRight="18dp"
+            android:gravity="center"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/playbackHours"
+            android:textSize="@dimen/picker_description_text_size"
+            android:layout_marginLeft="18dp"
+            android:layout_marginRight="@dimen/picker_description_margin"
+            android:gravity="center"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/playbackMinutes"
+            android:textSize="@dimen/picker_description_text_size"
+            android:layout_marginLeft="@dimen/picker_description_margin"
+            android:layout_marginRight="@dimen/picker_description_margin"
+            android:gravity="center"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/playbackSeconds"
+            android:textSize="@dimen/picker_description_text_size"
+            android:layout_marginLeft="@dimen/picker_description_margin"
+            android:layout_marginRight="@dimen/picker_description_margin"
+            android:gravity="center"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/playbackFrames"
+            android:textSize="@dimen/picker_description_text_size"
+            android:layout_marginLeft="@dimen/picker_description_margin"
+            android:layout_marginRight="@dimen/picker_description_margin"
+            android:gravity="center"/>
+
     </LinearLayout>
 
 </LinearLayout>
