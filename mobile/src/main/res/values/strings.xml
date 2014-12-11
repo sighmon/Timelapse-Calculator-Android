@@ -17,6 +17,14 @@
     <string name="interval">Interval</string>
     <string name="shots">Shots</string>
     <string name="fps">FPS</string>
+    <string name="shootingDays">Days</string>
+    <string name="shootingHours">Hrs</string>
+    <string name="shootingMinutes">Mins</string>
+    <string name="shootingSeconds">Secs</string>
+    <string name="playbackHours">Hrs</string>
+    <string name="playbackMinutes">Mins</string>
+    <string name="playbackSeconds">Secs</string>
+    <string name="playbackFrames">Frms</string>
 
 
 </resources>
