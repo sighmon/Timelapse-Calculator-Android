@@ -116,6 +116,7 @@ public class MainActivity extends Activity {
             // Set the min/max for the pickers.
             NumberPicker shootingDays = (NumberPicker) rootView.findViewById(R.id.shooting_days);
             shootingDays.setMaxValue(99);
+            shootingDays.setWrapSelectorWheel(false);
             NumberPicker shootingHours = (NumberPicker) rootView.findViewById(R.id.shooting_hours);
             shootingHours.setMaxValue(23);
             final NumberPicker shootingMinutes = (NumberPicker) rootView.findViewById(R.id.shooting_minutes);
@@ -131,6 +132,7 @@ public class MainActivity extends Activity {
 
             NumberPicker playbackHours = (NumberPicker) rootView.findViewById(R.id.playback_hours);
             playbackHours.setMaxValue(23);
+            playbackHours.setWrapSelectorWheel(false);
             NumberPicker playbackMinutes = (NumberPicker) rootView.findViewById(R.id.playback_minutes);
             playbackMinutes.setMaxValue(59);
             NumberPicker playbackSeconds = (NumberPicker) rootView.findViewById(R.id.playback_seconds);
