@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.os.Build;
 import android.widget.EditText;
 import android.widget.NumberPicker;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -33,6 +34,7 @@ public class MainActivity extends Activity {
     public final static Integer INTERVAL_FIELD = 8;
     public final static Integer SHOTS_FIELD = 3600;
     public final static Integer FPS_FIELD = 30;
+    public final static Boolean INTERVAL_CENTRIC = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,6 +157,8 @@ public class MainActivity extends Activity {
             shotsField.setText(SHOTS_FIELD.toString(), TextView.BufferType.EDITABLE);
             EditText fpsField = (EditText) rootView.findViewById(R.id.fps);
             fpsField.setText(FPS_FIELD.toString(), TextView.BufferType.EDITABLE);
+            final Switch intervalCentricSwitch = (Switch) rootView.findViewById(R.id.intervalCentricSwitch);
+            intervalCentricSwitch.setChecked(INTERVAL_CENTRIC);
 
             for (EditText field : new EditText[]{intervalField, shotsField, fpsField}) {
                 // When the user changes a field...
@@ -190,9 +194,17 @@ public class MainActivity extends Activity {
                         public void onScrollStateChange(NumberPicker v, int scrollState) {
                             if (scrollState == SCROLL_STATE_IDLE) {
                                 if (group == shootingGroup) {
-                                    shootingCentric(rootView);
+                                    if (intervalCentricSwitch.isChecked()) {
+                                        intervalCentricShooting(rootView);
+                                    } else {
+                                        shootingCentric(rootView);
+                                    }
                                 } else if (group == playbackGroup) {
-                                    playbackCentric(rootView);
+                                    if (intervalCentricSwitch.isChecked()) {
+                                        intervalCentricPlayback(rootView);
+                                    } else {
+                                        playbackCentric(rootView);
+                                    }
                                 }
                             }
                             scrollStates.put(v, scrollState);
@@ -323,6 +335,49 @@ public class MainActivity extends Activity {
         shotsField.setText(Integer.toString(shots), TextView.BufferType.EDITABLE);
 
         calculatePlaybackTime(view);
+    }
+
+    public static void intervalCentricShooting(View view) {
+
+        int shots = getIntegerFromEditText(view, R.id.shots);
+        int days = ((NumberPicker) view.findViewById(R.id.shooting_days)).getValue();
+        int hrs = ((NumberPicker) view.findViewById(R.id.shooting_hours)).getValue();
+        int mins = ((NumberPicker) view.findViewById(R.id.shooting_minutes)).getValue();
+        int secs = ((NumberPicker) view.findViewById(R.id.shooting_seconds)).getValue();
+        int seconds = (days * 24 * 60 * 60) + (hrs * 60 * 60) + (mins * 60) + secs;
+        int interval = seconds / shots;
+
+        EditText intervalField = (EditText) view.findViewById(R.id.interval);
+        intervalField.setText(Integer.toString(interval), TextView.BufferType.EDITABLE);
+
+        calculatePlaybackTime(view);
+    }
+
+    public static void intervalCentricPlayback(View view) {
+
+        int fps = getIntegerFromEditText(view, R.id.fps);
+        int hrs = ((NumberPicker) view.findViewById(R.id.playback_hours)).getValue();
+        int mins = ((NumberPicker) view.findViewById(R.id.playback_minutes)).getValue();
+        int secs = ((NumberPicker) view.findViewById(R.id.playback_seconds)).getValue();
+        int shootDays = ((NumberPicker) view.findViewById(R.id.shooting_days)).getValue();
+        int shootHrs = ((NumberPicker) view.findViewById(R.id.shooting_hours)).getValue();
+        int shootMins = ((NumberPicker) view.findViewById(R.id.shooting_minutes)).getValue();
+        int shootSecs = ((NumberPicker) view.findViewById(R.id.shooting_seconds)).getValue();
+        int totalPlaybackSeconds = (hrs * 60 * 60) + (mins * 60) + secs;
+        int shots = totalPlaybackSeconds * fps;
+        int totalShootingSeconds = (shootDays * 24 * 60 * 60) + (shootHrs * 60 * 60) + (shootMins * 60) + shootSecs;
+        int interval = 0;
+        if (shots > 0) {
+            interval = totalShootingSeconds / shots;
+        }
+
+        EditText intervalField = (EditText) view.findViewById(R.id.interval);
+        intervalField.setText(Integer.toString(interval), TextView.BufferType.EDITABLE);
+
+        EditText shotsField = (EditText) view.findViewById(R.id.shots);
+        shotsField.setText(Integer.toString(shots), TextView.BufferType.EDITABLE);
+
+        calculateShootingTime(view);
     }
 
     public static int getIntegerFromEditText(View view, int objectId) {

@@ -25,6 +25,6 @@
     <string name="playbackMinutes">Mins</string>
     <string name="playbackSeconds">Secs</string>
     <string name="playbackFrames">Frms</string>
-
+    <string name="interval_centric_switch">Interval centric calculations?</string>
 
 </resources>
