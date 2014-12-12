@@ -63,9 +63,9 @@ public class MainActivity extends Activity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
-            case R.id.menu_search:
-                Log.i("Menu", "Search pressed.");
-                openSearch();
+            case R.id.menu_reset:
+                Log.i("Menu", "Reset pressed.");
+                checkResetAlert();
                 return true;
             case R.id.action_settings:
                 Log.i("Menu", "Settings pressed.");
@@ -73,24 +73,30 @@ public class MainActivity extends Activity {
                 Intent intent = new Intent(this, SettingsActivity.class);
                 startActivity(intent);
                 return true;
+            case R.id.about:
+                Log.i("Menu", "About pressed.");
+                // About intent
+                Intent aboutIntent = new Intent(this, AboutActivity.class);
+                startActivity(aboutIntent);
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    public void openSearch() {
+    public void checkResetAlert() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         // Add the buttons
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // User clicked OK button
-                Log.i("Search", "Clicked OK.");
+                Log.i("Reset", "Clicked reset.");
+                resetToDefaults();
             }
         });
         builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // User cancelled the dialog
-                Log.i("Search", "Clicked cancel.");
+                Log.i("Reset", "Clicked cancel.");
             }
         });
         // Set other dialog properties
@@ -100,6 +106,30 @@ public class MainActivity extends Activity {
         // Create the AlertDialog
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    public void resetToDefaults() {
+
+        // Get shared preferences
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        // Get the user preferences
+        String intervalFromPreferences = sharedPreferences.getString("interval_field", null);
+        String shotsFromPreferences = sharedPreferences.getString("shots_field", null);
+        String fpsFromPreferences = sharedPreferences.getString("fps_field", null);
+        Boolean intervalCentricFromPreferences = sharedPreferences.getBoolean("interval_centric", false);
+
+        // Get the fields
+        EditText intervalField = (EditText) this.findViewById(R.id.interval);
+        EditText shotsField = (EditText) this.findViewById(R.id.shots);
+        EditText fpsField = (EditText) this.findViewById(R.id.fps);
+        final Switch intervalCentricSwitch = (Switch) this.findViewById(R.id.intervalCentricSwitch);
+
+        // Set the fields to user preferences
+        intervalField.setText(intervalFromPreferences, TextView.BufferType.EDITABLE);
+        shotsField.setText(shotsFromPreferences, TextView.BufferType.EDITABLE);
+        fpsField.setText(fpsFromPreferences, TextView.BufferType.EDITABLE);
+        intervalCentricSwitch.setChecked(intervalCentricFromPreferences);
     }
 
     /**
@@ -256,7 +286,7 @@ public class MainActivity extends Activity {
     /** Called when the user clicks the Send button */
     /* public void sendMessage(View view) {
         // Do something in response to button
-        Intent intent = new Intent(this, DisplayMessageActivity.class);
+        Intent intent = new Intent(this, AboutActivity.class);
         EditText editText = (EditText) findViewById(R.id.edit_message);
         String message = editText.getText().toString();
         intent.putExtra(EXTRA_MESSAGE, message);
