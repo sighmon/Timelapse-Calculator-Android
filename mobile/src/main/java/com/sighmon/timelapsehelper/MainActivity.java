@@ -6,7 +6,10 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceFragment;
+import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -31,10 +34,6 @@ import java.util.List;
 public class MainActivity extends Activity {
 
     public final static String EXTRA_MESSAGE = "com.sighmon.timelapsehelper.MESSAGE";
-    public final static Integer INTERVAL_FIELD = 8;
-    public final static Integer SHOTS_FIELD = 3600;
-    public final static Integer FPS_FIELD = 30;
-    public final static Boolean INTERVAL_CENTRIC = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,9 +41,12 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaceholderFragment())
+                    .add(R.id.container, new MainFragment())
                     .commit();
         }
+
+        // Set default preferences, the false on the end means it's only set once
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
     }
 
 
@@ -62,11 +64,14 @@ public class MainActivity extends Activity {
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
             case R.id.menu_search:
-                Log.i("Search", "Search pressed.");
+                Log.i("Menu", "Search pressed.");
                 openSearch();
                 return true;
             case R.id.action_settings:
-//                openSettings();
+                Log.i("Menu", "Settings pressed.");
+                // Settings intent
+                Intent intent = new Intent(this, SettingsActivity.class);
+                startActivity(intent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -100,9 +105,9 @@ public class MainActivity extends Activity {
     /**
      * A placeholder fragment containing a simple view.
      */
-    public static class PlaceholderFragment extends Fragment {
+    public static class MainFragment extends Fragment {
 
-        public PlaceholderFragment() {
+        public MainFragment() {
         }
 
         HashMap<NumberPicker,Integer> scrollStates = new HashMap<NumberPicker,Integer>();
@@ -114,6 +119,15 @@ public class MainActivity extends Activity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             final View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+
+            // Get shared preferences
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(rootView.getContext());
+
+            // Get the user preferences
+            String intervalFromPreferences = sharedPreferences.getString("interval_field", null);
+            String shotsFromPreferences = sharedPreferences.getString("shots_field", null);
+            String fpsFromPreferences = sharedPreferences.getString("fps_field", null);
+            Boolean intervalCentricFromPreferences = sharedPreferences.getBoolean("interval_centric", false);
 
             // Set the min/max for the pickers.
             NumberPicker shootingDays = (NumberPicker) rootView.findViewById(R.id.shooting_days);
@@ -140,7 +154,7 @@ public class MainActivity extends Activity {
             NumberPicker playbackSeconds = (NumberPicker) rootView.findViewById(R.id.playback_seconds);
             playbackSeconds.setMaxValue(59);
             NumberPicker playbackFrames = (NumberPicker) rootView.findViewById(R.id.playback_frames);
-            playbackFrames.setMaxValue(FPS_FIELD);
+            playbackFrames.setMaxValue(getIntegerFromStringIgnoringNumberFormatException(fpsFromPreferences));
 
             playbackGroup = Arrays.asList(
                     playbackHours,
@@ -148,17 +162,17 @@ public class MainActivity extends Activity {
                     playbackSeconds,
                     playbackFrames);
 
-
-            // Set the Interval, Shots & FPS fields to defaults
-            // TODO: Work out how to set app defaults in Android
+            // Get the fields
             EditText intervalField = (EditText) rootView.findViewById(R.id.interval);
-            intervalField.setText(INTERVAL_FIELD.toString(), TextView.BufferType.EDITABLE);
             EditText shotsField = (EditText) rootView.findViewById(R.id.shots);
-            shotsField.setText(SHOTS_FIELD.toString(), TextView.BufferType.EDITABLE);
             EditText fpsField = (EditText) rootView.findViewById(R.id.fps);
-            fpsField.setText(FPS_FIELD.toString(), TextView.BufferType.EDITABLE);
             final Switch intervalCentricSwitch = (Switch) rootView.findViewById(R.id.intervalCentricSwitch);
-            intervalCentricSwitch.setChecked(INTERVAL_CENTRIC);
+
+            // Set the fields to user preferences
+            intervalField.setText(intervalFromPreferences, TextView.BufferType.EDITABLE);
+            shotsField.setText(shotsFromPreferences, TextView.BufferType.EDITABLE);
+            fpsField.setText(fpsFromPreferences, TextView.BufferType.EDITABLE);
+            intervalCentricSwitch.setChecked(intervalCentricFromPreferences);
 
             for (EditText field : new EditText[]{intervalField, shotsField, fpsField}) {
                 // When the user changes a field...
@@ -383,11 +397,15 @@ public class MainActivity extends Activity {
     public static int getIntegerFromEditText(View view, int objectId) {
 
         EditText et = (EditText) view.findViewById(objectId);
-
         String etString = et.getText().toString();
+
+        return getIntegerFromStringIgnoringNumberFormatException(etString);
+    }
+
+    public static int getIntegerFromStringIgnoringNumberFormatException(String string) {
         int etInteger = 0;
         try {
-            etInteger = Integer.parseInt(etString);
+            etInteger = Integer.parseInt(string);
         }
         catch (NumberFormatException e){/* Ignore the exception */}
 
