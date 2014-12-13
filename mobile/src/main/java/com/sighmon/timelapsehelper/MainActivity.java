@@ -64,17 +64,17 @@ public class MainActivity extends Activity {
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
             case R.id.menu_reset:
-                Log.i("Menu", "Reset pressed.");
+                // Log.i("Menu", "Reset pressed.");
                 checkResetAlert();
                 return true;
             case R.id.action_settings:
-                Log.i("Menu", "Settings pressed.");
+                // Log.i("Menu", "Settings pressed.");
                 // Settings intent
                 Intent intent = new Intent(this, SettingsActivity.class);
                 startActivity(intent);
                 return true;
             case R.id.about:
-                Log.i("Menu", "About pressed.");
+                // Log.i("Menu", "About pressed.");
                 // About intent
                 Intent aboutIntent = new Intent(this, AboutActivity.class);
                 startActivity(aboutIntent);
@@ -89,14 +89,14 @@ public class MainActivity extends Activity {
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // User clicked OK button
-                Log.i("Reset", "Clicked reset.");
+                // Log.i("Reset", "Clicked reset.");
                 resetToDefaults();
             }
         });
         builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // User cancelled the dialog
-                Log.i("Reset", "Clicked cancel.");
+                // Log.i("Reset", "Clicked cancel.");
             }
         });
         // Set other dialog properties

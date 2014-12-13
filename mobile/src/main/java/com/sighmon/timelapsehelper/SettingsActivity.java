@@ -42,7 +42,7 @@ public class SettingsActivity extends PreferenceActivity {
             // Set the summary to the current values
             Map<String, ?> sharedPreferencesMap = getPreferenceScreen().getSharedPreferences().getAll();
             for (Map.Entry<String, ?> entry : sharedPreferencesMap.entrySet()) {
-                Log.d("map values", entry.getKey() + ": " + entry.getValue().toString());
+                // Log.d("map values", entry.getKey() + ": " + entry.getValue().toString());
                 Preference pref = findPreference(entry.getKey());
                 if (pref instanceof EditTextPreference) {
                     pref.setSummary(entry.getValue().toString());

@@ -16,10 +16,10 @@ public class AboutActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
 
-        // TODO: Load the about html
+        // Load the about html
         WebView webview = (WebView) findViewById(R.id.about_web_view);
-        String summary = "<html><body><h1>TODO...</h1><p>Add the real html.</p></body></html>";
-        webview.loadData(summary, "text/html", null);
+        // TODO: Save the html to an assets folder
+        webview.loadUrl("file:///android_asset/credits.html");
     }
 
 
