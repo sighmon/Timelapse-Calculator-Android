@@ -4,9 +4,12 @@ import android.app.Activity;
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.AssetManager;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
@@ -25,11 +28,14 @@ import android.widget.NumberPicker;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EventListener;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Properties;
 
 
 public class MainActivity extends Activity {
@@ -46,6 +52,9 @@ public class MainActivity extends Activity {
 
         // Set default preferences, the false on the end means it's only set once
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+
+        // To get a variable from config.properties
+        // Log.i("Properties", getVariableFromConfig(this, "HI"));
     }
 
 
@@ -439,6 +448,20 @@ public class MainActivity extends Activity {
         catch (NumberFormatException e){/* Ignore the exception */}
 
         return etInteger;
+    }
+
+    private static String getVariableFromConfig(Context context, String string) {
+        Resources resources = context.getResources();
+        AssetManager assetManager = resources.getAssets();
+        try {
+            InputStream inputStream = assetManager.open("config.properties");
+            Properties properties = new Properties();
+            properties.load(inputStream);
+            return properties.getProperty(string);
+        } catch (IOException e) {
+            Log.e("Properties","Failed to open config property file");
+            return null;
+        }
     }
 }
 

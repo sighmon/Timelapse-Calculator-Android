@@ -10,7 +10,7 @@
         <EditTextPreference
             android:key="interval_field"
             android:title="@string/interval"
-            android:defaultValue="16"
+            android:defaultValue="8"
             android:inputType="number"/>
         <EditTextPreference
             android:key="shots_field"
