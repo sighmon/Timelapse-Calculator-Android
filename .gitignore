@@ -6,3 +6,6 @@
 .DS_Store
 /build
 *.iml
+*.apk
+manifest-merger-release-report.txt
+config.properties

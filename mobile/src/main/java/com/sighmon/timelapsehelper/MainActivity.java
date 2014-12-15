@@ -31,9 +31,8 @@ import java.util.EventListener;
 import java.util.HashMap;
 import java.util.List;
 
-public class MainActivity extends Activity {
 
-    public final static String EXTRA_MESSAGE = "com.sighmon.timelapsehelper.MESSAGE";
+public class MainActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
