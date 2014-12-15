@@ -75,6 +75,10 @@ public class MainActivity extends Activity {
                 // Log.i("Menu", "Reset pressed.");
                 checkResetAlert();
                 return true;
+            case R.id.menu_share:
+                // Log.i("Share", "Share pressed.");
+                openShare();
+                return true;
             case R.id.action_settings:
                 // Log.i("Menu", "Settings pressed.");
                 // Settings intent
@@ -86,9 +90,70 @@ public class MainActivity extends Activity {
                 // About intent
                 Intent aboutIntent = new Intent(this, AboutActivity.class);
                 startActivity(aboutIntent);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    public void openShare() {
+
+        View view = getWindow().getDecorView();
+
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/html");
+        //intent.putExtra(Intent.EXTRA_EMAIL, "emailaddress@emailaddress.com");
+        intent.putExtra(Intent.EXTRA_SUBJECT, "Timelapse calculations");
+        intent.putExtra(Intent.EXTRA_TEXT, String.format("Shooting duration of %1$d shots at an interval of %2$d seconds will be %3$s. \n\nPlayback duration of %4$d shots at %5$d frames per second will be %6$s.",
+                getIntegerFromEditText(view,R.id.shots),
+                getIntegerFromEditText(view,R.id.interval),
+                stringFromShootingOrPlaybackCalculations(
+                        getIntegerFromNumberPicker(view,R.id.shooting_days),
+                        getIntegerFromNumberPicker(view,R.id.shooting_hours),
+                        getIntegerFromNumberPicker(view,R.id.shooting_minutes),
+                        getIntegerFromNumberPicker(view,R.id.shooting_seconds),
+                        0),
+                getIntegerFromEditText(view,R.id.shots),
+                getIntegerFromEditText(view,R.id.fps),
+                stringFromShootingOrPlaybackCalculations(
+                        0,
+                        getIntegerFromNumberPicker(view,R.id.shooting_days),
+                        getIntegerFromNumberPicker(view,R.id.shooting_hours),
+                        getIntegerFromNumberPicker(view,R.id.shooting_minutes),
+                        getIntegerFromNumberPicker(view,R.id.shooting_seconds))));
+
+        startActivity(Intent.createChooser(intent, "Send Email"));
+    }
+
+    public String stringFromShootingOrPlaybackCalculations(int days, int hrs, int mins, int secs, int frames) {
+        Boolean comma = false;
+        String result = "";
+
+        if (days > 0) {
+            result += String.format("%1$d day%2$s", days, days==1 ? "" : "s");
+            comma = true;
+        }
+        if (hrs > 0) {
+            Boolean and = (mins==0 && secs==0 && frames==0);
+            result += String.format("%1$s%2$d hour%3$s", comma?(and?" and ":", "):"", hrs, hrs==1?"":"s");
+            comma = true;
+        }
+        if (mins > 0) {
+            Boolean and = (secs==0 && frames==0);
+            result += String.format("%1$s%2$d minute%3$s", comma?(and?" and ":", "):"", mins, mins==1?"":"s");
+            comma = true;
+        }
+        if (secs > 0) {
+            Boolean and = (frames==0);
+            result += String.format("%1$s%2$d second%3$s", comma?(and?" and ":", "):"", secs, secs==1?"":"s");
+            comma = true;
+        }
+        if (frames > 0) {
+            Boolean and = true;
+            result += String.format("%1$s%2$d frame%3$s", comma?(and?" and ":", "):"", frames, frames==1?"":"s");
+            comma = true;
+        }
+        return result;
     }
 
     public void checkResetAlert() {
@@ -141,7 +206,7 @@ public class MainActivity extends Activity {
     }
 
     /**
-     * A placeholder fragment containing a simple view.
+     * The main view fragment.
      */
     public static class MainFragment extends Fragment {
 
@@ -291,16 +356,6 @@ public class MainActivity extends Activity {
         }
     }
 
-    /** Called when the user clicks the Send button */
-    /* public void sendMessage(View view) {
-        // Do something in response to button
-        Intent intent = new Intent(this, AboutActivity.class);
-        EditText editText = (EditText) findViewById(R.id.edit_message);
-        String message = editText.getText().toString();
-        intent.putExtra(EXTRA_MESSAGE, message);
-        startActivity(intent);
-    } */
-
     /*** TIME CALCULATION MATH ***/
 
     public static void calculateShootingTime(View view) {
@@ -432,12 +487,19 @@ public class MainActivity extends Activity {
         calculateShootingTime(view);
     }
 
+    /*** HELPERS ***/
+
     public static int getIntegerFromEditText(View view, int objectId) {
 
         EditText et = (EditText) view.findViewById(objectId);
         String etString = et.getText().toString();
 
         return getIntegerFromStringIgnoringNumberFormatException(etString);
+    }
+
+    public static int getIntegerFromNumberPicker(View view, int objectId) {
+        NumberPicker np = (NumberPicker) view.findViewById(objectId);
+        return np.getValue();
     }
 
     public static int getIntegerFromStringIgnoringNumberFormatException(String string) {
