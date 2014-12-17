@@ -40,6 +40,8 @@ import java.util.Properties;
 
 public class MainActivity extends Activity {
 
+    public static Boolean editTextChangedByIntervalCentric = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -287,8 +289,13 @@ public class MainActivity extends Activity {
 
                     @Override
                     public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        calculateShootingTime(rootView);
-                        calculatePlaybackTime(rootView);
+                        if (editTextChangedByIntervalCentric) {
+                            // Do nothing.
+                            editTextChangedByIntervalCentric = false;
+                        } else {
+                            calculateShootingTime(rootView);
+                            calculatePlaybackTime(rootView);
+                        }
                     }
 
                     @Override
@@ -309,21 +316,22 @@ public class MainActivity extends Activity {
                     picker.setOnScrollListener(new NumberPicker.OnScrollListener() {
                         @Override
                         public void onScrollStateChange(NumberPicker v, int scrollState) {
-                            if (scrollState == SCROLL_STATE_IDLE) {
-                                if (group == shootingGroup) {
-                                    if (intervalCentricSwitch.isChecked()) {
-                                        intervalCentricShooting(rootView);
-                                    } else {
-                                        shootingCentric(rootView);
-                                    }
-                                } else if (group == playbackGroup) {
-                                    if (intervalCentricSwitch.isChecked()) {
-                                        intervalCentricPlayback(rootView);
-                                    } else {
-                                        playbackCentric(rootView);
-                                    }
-                                }
-                            }
+                            // Perform calculations when spinner has stopped spinning (is idle)
+//                            if (scrollState == SCROLL_STATE_IDLE) {
+//                                if (group == shootingGroup) {
+//                                    if (intervalCentricSwitch.isChecked()) {
+//                                        intervalCentricShooting(rootView);
+//                                    } else {
+//                                        shootingCentric(rootView);
+//                                    }
+//                                } else if (group == playbackGroup) {
+//                                    if (intervalCentricSwitch.isChecked()) {
+//                                        intervalCentricPlayback(rootView);
+//                                    } else {
+//                                        playbackCentric(rootView);
+//                                    }
+//                                }
+//                            }
                             scrollStates.put(v, scrollState);
                             //Log.i("picker", "scroll state: " + scrollState);
                         }
@@ -335,11 +343,28 @@ public class MainActivity extends Activity {
                     picker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
                         @Override
                         public void onValueChange(NumberPicker thisPicker, int oldVal, int newVal) {
+
+                            // Perform calculations instantly
+                            if (group == shootingGroup) {
+                                if (intervalCentricSwitch.isChecked()) {
+                                    intervalCentricShooting(rootView);
+                                } else {
+                                    shootingCentric(rootView);
+                                }
+                            } else if (group == playbackGroup) {
+                                if (intervalCentricSwitch.isChecked()) {
+                                    intervalCentricPlayback(rootView);
+                                } else {
+                                    playbackCentric(rootView);
+                                }
+                            }
+
+                            // Check for rollover
                             int delta = newVal - oldVal;
                             //Log.i("picker", "valuechanged from " + oldVal + " to " + newVal + " (delta " + delta + ")");
                             int maxDelta = thisPicker.getMaxValue() - thisPicker.getMinValue();
                             // if this picker is scrolling and the value has jumped, we have probably rolled over
-                            if (scrollStates.get(thisPicker).intValue() != NumberPicker.OnScrollListener.SCROLL_STATE_IDLE && Math.abs(delta) > (maxDelta / 2)) {
+                            if ((scrollStates.get(thisPicker) != null) && (scrollStates.get(thisPicker).intValue() != NumberPicker.OnScrollListener.SCROLL_STATE_IDLE && Math.abs(delta) > (maxDelta / 2))) {
                                 int thisIndex = group.indexOf(thisPicker);
                                 if (thisIndex>0) {
                                     NumberPicker nextMostSignificantPicker = (NumberPicker) group.get(thisIndex - 1);
@@ -455,6 +480,7 @@ public class MainActivity extends Activity {
         int interval = seconds / shots;
 
         EditText intervalField = (EditText) view.findViewById(R.id.interval);
+        editTextChangedByIntervalCentric = true;
         intervalField.setText(Integer.toString(interval), TextView.BufferType.EDITABLE);
 
         calculatePlaybackTime(view);
@@ -479,12 +505,15 @@ public class MainActivity extends Activity {
         }
 
         EditText intervalField = (EditText) view.findViewById(R.id.interval);
+        editTextChangedByIntervalCentric = true;
         intervalField.setText(Integer.toString(interval), TextView.BufferType.EDITABLE);
 
         EditText shotsField = (EditText) view.findViewById(R.id.shots);
+        editTextChangedByIntervalCentric = true;
         shotsField.setText(Integer.toString(shots), TextView.BufferType.EDITABLE);
 
-        calculateShootingTime(view);
+        // TODO: Don't change shooting time? Does this sound right?
+//        calculateShootingTime(view);
     }
 
     /*** HELPERS ***/
