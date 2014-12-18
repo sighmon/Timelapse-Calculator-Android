@@ -18,7 +18,7 @@ public class AboutActivity extends Activity {
 
         // Load the about html
         WebView webview = (WebView) findViewById(R.id.about_web_view);
-        // TODO: Save the html to an assets folder
+        webview.setBackgroundColor(0x00000000);
         webview.loadUrl("file:///android_asset/credits.html");
     }
 
