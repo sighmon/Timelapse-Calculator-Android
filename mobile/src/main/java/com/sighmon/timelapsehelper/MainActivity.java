@@ -104,7 +104,6 @@ public class MainActivity extends Activity {
 
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("text/html");
-        //intent.putExtra(Intent.EXTRA_EMAIL, "emailaddress@emailaddress.com");
         intent.putExtra(Intent.EXTRA_SUBJECT, "Timelapse calculations");
         intent.putExtra(Intent.EXTRA_TEXT, String.format("Shooting duration of %1$d shots at an interval of %2$d seconds will be %3$s. \n\nPlayback duration of %4$d shots at %5$d frames per second will be %6$s.",
                 getIntegerFromEditText(view,R.id.shots),
@@ -119,12 +118,12 @@ public class MainActivity extends Activity {
                 getIntegerFromEditText(view,R.id.fps),
                 stringFromShootingOrPlaybackCalculations(
                         0,
-                        getIntegerFromNumberPicker(view,R.id.shooting_days),
-                        getIntegerFromNumberPicker(view,R.id.shooting_hours),
-                        getIntegerFromNumberPicker(view,R.id.shooting_minutes),
-                        getIntegerFromNumberPicker(view,R.id.shooting_seconds))));
+                        getIntegerFromNumberPicker(view,R.id.playback_hours),
+                        getIntegerFromNumberPicker(view,R.id.playback_minutes),
+                        getIntegerFromNumberPicker(view,R.id.playback_seconds),
+                        getIntegerFromNumberPicker(view,R.id.playback_frames))));
 
-        startActivity(Intent.createChooser(intent, "Send Email"));
+        startActivity(Intent.createChooser(intent, "Share your calculations"));
     }
 
     public String stringFromShootingOrPlaybackCalculations(int days, int hrs, int mins, int secs, int frames) {
