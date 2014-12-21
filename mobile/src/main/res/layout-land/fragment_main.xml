@@ -1,0 +1,246 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_vertical">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center_horizontal"
+        android:paddingTop="2dp"
+        android:paddingBottom="5dp">
+
+        <EditText android:id="@+id/interval"
+            android:layout_weight="1"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:inputType="number"
+            android:gravity="center"
+            android:hint="@string/interval" />
+
+        <EditText android:id="@+id/shots"
+            android:layout_weight="1"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:inputType="number"
+            android:gravity="center"
+            android:hint="@string/shots" />
+
+        <EditText android:id="@+id/fps"
+            android:layout_weight="1"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:inputType="number"
+            android:gravity="center"
+            android:hint="@string/fps" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center_horizontal"
+        android:paddingTop="0dp"
+        android:paddingBottom="5dp">
+
+        <TextView
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:text="@string/interval"
+            android:textSize="@dimen/edit_text_description_text_size"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:gravity="center"/>
+
+        <TextView
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:text="@string/shots"
+            android:textSize="@dimen/edit_text_description_text_size"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:gravity="center"/>
+
+        <TextView
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:text="@string/fps"
+            android:textSize="@dimen/edit_text_description_text_size"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:gravity="center"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center_horizontal"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp">
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/shooting_picker"
+            android:textSize="@dimen/picker_title_text_size_land"
+            android:layout_marginRight="120dp"/>
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/playback_picker"
+            android:textSize="@dimen/picker_title_text_size_land"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <NumberPicker
+            android:id="@+id/shooting_days"
+            android:layout_width="40dp"
+            android:layout_height="120dp"></NumberPicker>
+        <NumberPicker
+            android:id="@+id/shooting_hours"
+            android:layout_width="40dp"
+            android:layout_height="120dp"></NumberPicker>
+        <NumberPicker
+            android:id="@+id/shooting_minutes"
+            android:layout_width="40dp"
+            android:layout_height="120dp"></NumberPicker>
+        <NumberPicker
+            android:id="@+id/shooting_seconds"
+            android:layout_width="40dp"
+            android:layout_height="120dp"
+            android:layout_marginRight="60dp"></NumberPicker>
+        <NumberPicker
+            android:id="@+id/playback_hours"
+            android:layout_width="40dp"
+            android:layout_height="120dp"></NumberPicker>
+        <NumberPicker
+            android:id="@+id/playback_minutes"
+            android:layout_width="40dp"
+            android:layout_height="120dp"></NumberPicker>
+        <NumberPicker
+            android:id="@+id/playback_seconds"
+            android:layout_width="40dp"
+            android:layout_height="120dp"></NumberPicker>
+        <NumberPicker
+            android:id="@+id/playback_frames"
+            android:layout_width="40dp"
+            android:layout_height="120dp"></NumberPicker>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/shootingDays"
+            android:textSize="@dimen/picker_description_text_size"
+            android:layout_marginLeft="@dimen/picker_description_margin"
+            android:layout_marginRight="@dimen/picker_description_margin"
+            android:gravity="center"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/shootingHours"
+            android:textSize="@dimen/picker_description_text_size"
+            android:layout_marginLeft="@dimen/picker_description_margin"
+            android:layout_marginRight="@dimen/picker_description_margin"
+            android:gravity="center"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/shootingMinutes"
+            android:textSize="@dimen/picker_description_text_size"
+            android:layout_marginLeft="@dimen/picker_description_margin"
+            android:layout_marginRight="@dimen/picker_description_margin"
+            android:gravity="center"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/shootingSeconds"
+            android:textSize="@dimen/picker_description_text_size"
+            android:layout_marginLeft="@dimen/picker_description_margin"
+            android:layout_marginRight="60dp"
+            android:gravity="center"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/playbackHours"
+            android:textSize="@dimen/picker_description_text_size"
+            android:layout_marginLeft="18dp"
+            android:layout_marginRight="@dimen/picker_description_margin"
+            android:gravity="center"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/playbackMinutes"
+            android:textSize="@dimen/picker_description_text_size"
+            android:layout_marginLeft="@dimen/picker_description_margin"
+            android:layout_marginRight="@dimen/picker_description_margin"
+            android:gravity="center"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/playbackSeconds"
+            android:textSize="@dimen/picker_description_text_size"
+            android:layout_marginLeft="@dimen/picker_description_margin"
+            android:layout_marginRight="@dimen/picker_description_margin"
+            android:gravity="center"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/playbackFrames"
+            android:textSize="@dimen/picker_description_text_size"
+            android:layout_marginLeft="@dimen/picker_description_margin"
+            android:layout_marginRight="@dimen/picker_description_margin"
+            android:gravity="center"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="0dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/interval_centric_switch"
+            android:layout_marginRight="20dp"/>
+
+        <Switch
+            android:id="@+id/intervalCentricSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+</LinearLayout>

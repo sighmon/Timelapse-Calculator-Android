@@ -1,7 +1,6 @@
 package com.sighmon.timelapsehelper;
 
 import android.app.Activity;
-import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
@@ -11,18 +10,15 @@ import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.os.Build;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.Switch;
@@ -30,9 +26,7 @@ import android.widget.TextView;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.EventListener;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
@@ -40,7 +34,7 @@ import java.util.Properties;
 
 public class MainActivity extends Activity {
 
-    public static Boolean editTextChangedByIntervalCentric = false;
+    public static Boolean editTextChangedByNumberPicker = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -288,9 +282,9 @@ public class MainActivity extends Activity {
 
                     @Override
                     public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        if (editTextChangedByIntervalCentric) {
+                        if (editTextChangedByNumberPicker) {
                             // Do nothing.
-                            editTextChangedByIntervalCentric = false;
+                            editTextChangedByNumberPicker = false;
                         } else {
                             calculateShootingTime(rootView);
                             calculatePlaybackTime(rootView);
@@ -446,6 +440,7 @@ public class MainActivity extends Activity {
         int shots = (hrs * (60 * 60 * fps)) + (mins * (60*fps)) + (secs * fps) + frames;
 
         EditText shotsField = (EditText) view.findViewById(R.id.shots);
+        editTextChangedByNumberPicker = true;
         shotsField.setText(Integer.toString(shots), TextView.BufferType.EDITABLE);
 
         calculateShootingTime(view);
@@ -463,6 +458,7 @@ public class MainActivity extends Activity {
         int shots = seconds / interval;
 
         EditText shotsField = (EditText) view.findViewById(R.id.shots);
+        editTextChangedByNumberPicker = true;
         shotsField.setText(Integer.toString(shots), TextView.BufferType.EDITABLE);
 
         calculatePlaybackTime(view);
@@ -479,7 +475,7 @@ public class MainActivity extends Activity {
         int interval = seconds / shots;
 
         EditText intervalField = (EditText) view.findViewById(R.id.interval);
-        editTextChangedByIntervalCentric = true;
+        editTextChangedByNumberPicker = true;
         intervalField.setText(Integer.toString(interval), TextView.BufferType.EDITABLE);
 
         calculatePlaybackTime(view);
@@ -504,11 +500,11 @@ public class MainActivity extends Activity {
         }
 
         EditText intervalField = (EditText) view.findViewById(R.id.interval);
-        editTextChangedByIntervalCentric = true;
+        editTextChangedByNumberPicker = true;
         intervalField.setText(Integer.toString(interval), TextView.BufferType.EDITABLE);
 
         EditText shotsField = (EditText) view.findViewById(R.id.shots);
-        editTextChangedByIntervalCentric = true;
+        editTextChangedByNumberPicker = true;
         shotsField.setText(Integer.toString(shots), TextView.BufferType.EDITABLE);
 
         // TODO: Don't change shooting time? Does this sound right?
