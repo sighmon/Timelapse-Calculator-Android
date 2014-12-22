@@ -2,6 +2,8 @@ package com.sighmon.timelapsehelper;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,6 +17,17 @@ public class AboutActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
+
+        // Set the version number
+        PackageInfo pInfo = null;
+        try {
+            pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        String version = pInfo.versionName + String.format(" (%1$d)",pInfo.versionCode);
+        TextView versionTextView = (TextView) this.findViewById(R.id.about_version);
+        versionTextView.setText(version);
 
         // Load the about html
         WebView webview = (WebView) findViewById(R.id.about_web_view);
